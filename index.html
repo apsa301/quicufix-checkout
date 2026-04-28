@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QuickFix | Walk-in Check-in</title>
+
   <style>
     :root {
       --navy: #0f2545;
@@ -18,7 +19,9 @@
       --shadow: 0 18px 45px rgba(15, 37, 69, 0.18);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -46,50 +49,34 @@
     }
 
     .hero {
-      background: radial-gradient(circle at top right, rgba(232, 212, 154, 0.36), transparent 34%), linear-gradient(135deg, var(--navy), var(--navy-2));
+      background:
+        radial-gradient(circle at top right, rgba(232, 212, 154, 0.36), transparent 34%),
+        linear-gradient(135deg, var(--navy), var(--navy-2));
       color: white;
-      padding: 28px 24px 22px;
-      position: relative;
+      padding: 26px 24px 22px;
     }
 
     .top-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .brand {
+      min-width: 0;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      font-size: 30px;
     }
 
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 7px solid white;
-      position: relative;
+    .quickfix-logo {
+      width: 230px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
     }
-
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      right: -9px;
-      bottom: -5px;
-      width: 22px;
-      height: 9px;
-      background: var(--gold);
-      transform: rotate(42deg);
-      border-radius: 2px;
-    }
-
-    .brand span:last-child { color: var(--gold-2); }
 
     .badge {
       font-size: 12px;
@@ -99,6 +86,7 @@
       border-radius: 999px;
       padding: 7px 10px;
       white-space: nowrap;
+      margin-top: 4px;
     }
 
     .hero h1 {
@@ -141,7 +129,9 @@
       font-size: 15px;
     }
 
-    .content { padding: 22px; }
+    .content {
+      padding: 22px;
+    }
 
     .section-title {
       display: flex;
@@ -161,6 +151,7 @@
       font-size: 12px;
       color: var(--grey);
       font-weight: 600;
+      text-align: right;
     }
 
     .packages {
@@ -181,6 +172,13 @@
       grid-template-columns: 1fr auto;
       gap: 10px;
       align-items: center;
+      font: inherit;
+      color: inherit;
+    }
+
+    .package:hover {
+      border-color: rgba(200, 167, 90, 0.75);
+      transform: translateY(-1px);
     }
 
     .package.active {
@@ -212,25 +210,38 @@
 
     .services {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
       margin-bottom: 22px;
     }
 
     .service {
       background: var(--light);
-      border-radius: 16px;
+      border-radius: 17px;
       padding: 12px 8px;
       text-align: center;
-      min-height: 78px;
+      min-height: 112px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 6px;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid rgba(15, 37, 69, 0.05);
     }
 
-    .service .icon { font-size: 20px; }
-    .service span { font-size: 11px; font-weight: 700; line-height: 1.2; }
+    .service img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      display: block;
+      opacity: 0.92;
+    }
+
+    .service span {
+      font-size: 11px;
+      font-weight: 750;
+      line-height: 1.2;
+    }
 
     .payment-grid {
       display: grid;
@@ -248,6 +259,11 @@
       color: var(--navy);
       cursor: pointer;
       transition: 0.2s ease;
+      font: inherit;
+    }
+
+    .pay-btn:hover {
+      border-color: var(--navy);
     }
 
     .pay-btn.active {
@@ -272,8 +288,14 @@
       font-size: 14px;
     }
 
-    .summary-row span:first-child { color: var(--grey); }
-    .summary-row strong { font-size: 18px; }
+    .summary-row span:first-child {
+      color: var(--grey);
+    }
+
+    .summary-row strong {
+      font-size: 18px;
+      text-align: right;
+    }
 
     .cta {
       width: 100%;
@@ -288,10 +310,22 @@
       box-shadow: 0 12px 28px rgba(15, 37, 69, 0.26);
     }
 
+    .cta:hover {
+      transform: translateY(-1px);
+    }
+
     .confirmation {
       display: none;
       padding: 26px 22px 28px;
       text-align: center;
+    }
+
+    .confirmation-logo {
+      width: 220px;
+      max-width: 86%;
+      height: auto;
+      display: block;
+      margin: 0 auto 12px;
     }
 
     .success-icon {
@@ -331,11 +365,18 @@
     .ticket-row {
       display: flex;
       justify-content: space-between;
+      gap: 12px;
       padding: 8px 0;
       font-size: 14px;
     }
 
-    .ticket-row span:first-child { color: var(--grey); }
+    .ticket-row span:first-child {
+      color: var(--grey);
+    }
+
+    .ticket-row strong {
+      text-align: right;
+    }
 
     .back-btn {
       background: transparent;
@@ -344,30 +385,84 @@
       font-weight: 800;
       padding: 12px;
       cursor: pointer;
+      font: inherit;
     }
 
     @media (max-width: 460px) {
-      .page { padding: 0; align-items: stretch; }
-      .phone { border-radius: 0; width: 100%; min-height: 100vh; }
-      .services { grid-template-columns: repeat(2, 1fr); }
-      .hero h1 { font-size: 28px; }
+      .page {
+        padding: 0;
+        align-items: stretch;
+      }
+
+      .phone {
+        border-radius: 0;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      .top-row {
+        gap: 10px;
+      }
+
+      .quickfix-logo {
+        width: 210px;
+      }
+
+      .badge {
+        font-size: 11px;
+        padding: 6px 9px;
+      }
+
+      .services {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 370px) {
+      .top-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .quickfix-logo {
+        width: 230px;
+      }
+
+      .badge {
+        margin-top: 0;
+      }
+
+      .package {
+        grid-template-columns: 1fr;
+      }
+
+      .price {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="page">
     <section class="phone" aria-label="QuickFix walk-in payment mockup">
+
       <div id="checkout-screen">
         <header class="hero">
           <div class="top-row">
             <div class="brand" aria-label="QuickFix logo">
-              <div class="brand-mark"></div>
-              <div>Quick<span>Fix</span></div>
+              <img src="quickfix-logo.png" alt="QuickFix logo" class="quickfix-logo">
             </div>
             <div class="badge">HKUST Campus</div>
           </div>
+
           <h1>Look sharp in<br />15 minutes.</h1>
           <p>Walk in, choose your readiness package, pay securely, and get directed to the next available station.</p>
+
           <div class="status-strip">
             <div class="status-card">
               <small>Estimated wait</small>
@@ -375,7 +470,7 @@
             </div>
             <div class="status-card">
               <small>Next station</small>
-              <strong>Hair Styling</strong>
+              <strong id="next-station">Hair Styling</strong>
             </div>
           </div>
         </header>
@@ -387,7 +482,7 @@
           </div>
 
           <div class="packages">
-            <button class="package active" data-name="Interview Ready" data-price="120" data-wait="6 minutes">
+            <button class="package active" data-name="Interview Ready" data-price="120" data-wait="6 minutes" data-station="Hair Styling">
               <div>
                 <h3>Interview Ready</h3>
                 <ul>
@@ -399,7 +494,7 @@
               <div class="price">HK$120</div>
             </button>
 
-            <button class="package" data-name="Presentation Ready" data-price="90" data-wait="4 minutes">
+            <button class="package" data-name="Presentation Ready" data-price="90" data-wait="4 minutes" data-station="Steam & Press">
               <div>
                 <h3>Presentation Ready</h3>
                 <ul>
@@ -410,7 +505,7 @@
               <div class="price">HK$90</div>
             </button>
 
-            <button class="package" data-name="Event Refresh" data-price="80" data-wait="3 minutes">
+            <button class="package" data-name="Event Refresh" data-price="80" data-wait="3 minutes" data-station="Finish Touch">
               <div>
                 <h3>Event Refresh</h3>
                 <ul>
@@ -424,14 +519,30 @@
 
           <div class="section-title">
             <h2>Included services</h2>
-            <span>Express model</span>
+            <span id="services-note">5 services included</span>
           </div>
 
-          <div class="services">
-            <div class="service"><div class="icon">〰️</div><span>Hair styling</span></div>
-            <div class="service"><div class="icon">👔</div><span>Steam & press</span></div>
-            <div class="service"><div class="icon">🧥</div><span>Blazer / tie</span></div>
-            <div class="service"><div class="icon">✨</div><span>Finish touch</span></div>
+          <div class="services" id="services-list">
+            <div class="service">
+              <img src="hair-styling.png" alt="Hair styling">
+              <span>Hair Styling</span>
+            </div>
+            <div class="service">
+              <img src="steam-press.png" alt="Steam and press">
+              <span>Steam & Press</span>
+            </div>
+            <div class="service">
+              <img src="blazer-tie.png" alt="Blazer and tie adjustment">
+              <span>Blazer / Tie</span>
+            </div>
+            <div class="service">
+              <img src="lint-removal.png" alt="Lint removal">
+              <span>Lint Removal</span>
+            </div>
+            <div class="service">
+              <img src="fragrance-refresh.png" alt="Fragrance refresh">
+              <span>Fragrance Refresh</span>
+            </div>
           </div>
 
           <div class="section-title">
@@ -446,9 +557,22 @@
           </div>
 
           <div class="summary">
-            <div class="summary-row"><span>Selected package</span><strong id="summary-name">Interview Ready</strong></div>
-            <div class="summary-row"><span>Estimated completion</span><strong>15 min</strong></div>
-            <div class="summary-row"><span>Total</span><strong id="summary-price">HK$120</strong></div>
+            <div class="summary-row">
+              <span>Selected package</span>
+              <strong id="summary-name">Interview Ready</strong>
+            </div>
+            <div class="summary-row">
+              <span>Estimated completion</span>
+              <strong>15 min</strong>
+            </div>
+            <div class="summary-row">
+              <span>Payment method</span>
+              <strong id="summary-payment">Octopus</strong>
+            </div>
+            <div class="summary-row">
+              <span>Total</span>
+              <strong id="summary-price">HK$120</strong>
+            </div>
           </div>
 
           <button class="cta" id="checkin-btn">Check in & pay</button>
@@ -456,51 +580,122 @@
       </div>
 
       <div class="confirmation" id="confirmation-screen">
+        <img src="quickfix-logo.png" alt="QuickFix logo" class="confirmation-logo">
+
         <div class="success-icon">✓</div>
         <h2>You’re checked in.</h2>
         <p>Your QuickFix ticket is ready. Please wait near the check-in counter until your station is called.</p>
+
         <div class="ticket">
-          <div class="ticket-row"><span>Ticket no.</span><strong>QF-027</strong></div>
-          <div class="ticket-row"><span>Package</span><strong id="ticket-package">Interview Ready</strong></div>
-          <div class="ticket-row"><span>Station</span><strong>Hair Styling</strong></div>
-          <div class="ticket-row"><span>Estimated wait</span><strong id="ticket-wait">6 minutes</strong></div>
-          <div class="ticket-row"><span>Paid by</span><strong id="ticket-payment">Octopus</strong></div>
+          <div class="ticket-row">
+            <span>Ticket no.</span>
+            <strong>QF-027</strong>
+          </div>
+          <div class="ticket-row">
+            <span>Package</span>
+            <strong id="ticket-package">Interview Ready</strong>
+          </div>
+          <div class="ticket-row">
+            <span>Station</span>
+            <strong id="ticket-station">Hair Styling</strong>
+          </div>
+          <div class="ticket-row">
+            <span>Estimated wait</span>
+            <strong id="ticket-wait">6 minutes</strong>
+          </div>
+          <div class="ticket-row">
+            <span>Paid by</span>
+            <strong id="ticket-payment">Octopus</strong>
+          </div>
         </div>
+
         <button class="cta" onclick="window.print()">Save / Print ticket</button>
         <button class="back-btn" id="new-checkin">Start new check-in</button>
       </div>
+
     </section>
   </main>
 
   <script>
     const packages = document.querySelectorAll('.package');
     const payButtons = document.querySelectorAll('.pay-btn');
+
     const summaryName = document.getElementById('summary-name');
     const summaryPrice = document.getElementById('summary-price');
+    const summaryPayment = document.getElementById('summary-payment');
     const waitTime = document.getElementById('wait-time');
+    const nextStation = document.getElementById('next-station');
+
     const checkinBtn = document.getElementById('checkin-btn');
     const checkoutScreen = document.getElementById('checkout-screen');
     const confirmationScreen = document.getElementById('confirmation-screen');
+
     const ticketPackage = document.getElementById('ticket-package');
     const ticketWait = document.getElementById('ticket-wait');
     const ticketPayment = document.getElementById('ticket-payment');
+    const ticketStation = document.getElementById('ticket-station');
     const newCheckin = document.getElementById('new-checkin');
+
+    const servicesList = document.getElementById('services-list');
+    const servicesNote = document.getElementById('services-note');
 
     let selectedPackage = 'Interview Ready';
     let selectedPrice = '120';
     let selectedWait = '6 minutes';
     let selectedPayment = 'Octopus';
+    let selectedStation = 'Hair Styling';
+
+    const packageServices = {
+      'Interview Ready': [
+        ['hair-styling.png', 'Hair Styling'],
+        ['steam-press.png', 'Steam & Press'],
+        ['blazer-tie.png', 'Blazer / Tie'],
+        ['lint-removal.png', 'Lint Removal'],
+        ['fragrance-refresh.png', 'Fragrance Refresh']
+      ],
+      'Presentation Ready': [
+        ['hair-styling.png', 'Hair Styling'],
+        ['steam-press.png', 'Steam & Press'],
+        ['lint-removal.png', 'Lint Removal']
+      ],
+      'Event Refresh': [
+        ['hair-styling.png', 'Hair Styling'],
+        ['lint-removal.png', 'Lint Removal'],
+        ['fragrance-refresh.png', 'Fragrance Refresh']
+      ]
+    };
+
+    function updateServices(packageName) {
+      const services = packageServices[packageName];
+
+      servicesList.innerHTML = services
+        .map(([image, label]) => `
+          <div class="service">
+            <img src="${image}" alt="${label}">
+            <span>${label}</span>
+          </div>
+        `)
+        .join('');
+
+      servicesNote.textContent = `${services.length} services included`;
+    }
 
     packages.forEach(button => {
       button.addEventListener('click', () => {
         packages.forEach(item => item.classList.remove('active'));
         button.classList.add('active');
+
         selectedPackage = button.dataset.name;
         selectedPrice = button.dataset.price;
         selectedWait = button.dataset.wait;
+        selectedStation = button.dataset.station;
+
         summaryName.textContent = selectedPackage;
         summaryPrice.textContent = `HK$${selectedPrice}`;
         waitTime.textContent = selectedWait;
+        nextStation.textContent = selectedStation;
+
+        updateServices(selectedPackage);
       });
     });
 
@@ -508,7 +703,9 @@
       button.addEventListener('click', () => {
         payButtons.forEach(item => item.classList.remove('active'));
         button.classList.add('active');
+
         selectedPayment = button.textContent;
+        summaryPayment.textContent = selectedPayment;
       });
     });
 
@@ -516,6 +713,8 @@
       ticketPackage.textContent = selectedPackage;
       ticketWait.textContent = selectedWait;
       ticketPayment.textContent = selectedPayment;
+      ticketStation.textContent = selectedStation;
+
       checkoutScreen.style.display = 'none';
       confirmationScreen.style.display = 'block';
       window.scrollTo(0, 0);
