@@ -12,7 +12,6 @@
       --navy-2: #16365f;
       --gold: #c8a75a;
       --gold-2: #e8d49a;
-      --cream: #f7f3ea;
       --white: #ffffff;
       --grey: #6b7280;
       --light: #eef2f6;
@@ -203,6 +202,79 @@
       font-weight: 850;
       color: var(--navy);
       letter-spacing: -0.04em;
+      text-align: right;
+    }
+
+    .individual-panel {
+      display: none;
+      background: #f8fafc;
+      border: 1px solid #e5eaf1;
+      border-radius: 22px;
+      padding: 16px;
+      margin: -6px 0 22px;
+    }
+
+    .individual-panel.active {
+      display: block;
+    }
+
+    .individual-note {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--grey);
+      line-height: 1.45;
+    }
+
+    .individual-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .individual-item {
+      width: 100%;
+      border: 1.5px solid #d9dee7;
+      background: white;
+      border-radius: 17px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      transition: 0.2s ease;
+    }
+
+    .individual-item img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    .individual-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .individual-item small {
+      display: block;
+      font-size: 11px;
+      color: var(--grey);
+      margin-top: 2px;
+    }
+
+    .individual-item .service-price {
+      font-weight: 850;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .individual-item.selected {
+      border-color: var(--gold);
+      background: #fffaf0;
+      box-shadow: 0 8px 18px rgba(200, 167, 90, 0.13);
     }
 
     .services {
@@ -224,6 +296,16 @@
       align-items: center;
       gap: 9px;
       border: 1px solid rgba(15, 37, 69, 0.05);
+      cursor: pointer;
+      transition: 0.2s ease;
+      font: inherit;
+      color: inherit;
+    }
+
+    .service:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200, 167, 90, 0.45);
+      box-shadow: 0 8px 20px rgba(15, 37, 69, 0.08);
     }
 
     .service img {
@@ -294,6 +376,13 @@
       text-align: right;
     }
 
+    .summary-detail {
+      color: var(--grey);
+      font-size: 12px;
+      line-height: 1.45;
+      padding-top: 4px;
+    }
+
     .cta {
       width: 100%;
       border: 0;
@@ -309,6 +398,12 @@
 
     .cta:hover {
       transform: translateY(-1px);
+    }
+
+    .cta:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .confirmation {
@@ -397,6 +492,80 @@
       font: inherit;
     }
 
+    .service-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 23, 61, 0.72);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 22px;
+      z-index: 999;
+    }
+
+    .service-modal.active {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(360px, 100%);
+      background: white;
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      position: relative;
+      animation: modalRise 0.18s ease-out;
+    }
+
+    @keyframes modalRise {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      background: #eef2f6;
+      color: #06173D;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .modal-card h3 {
+      margin: 0 38px 8px 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+      color: #06173D;
+    }
+
+    .modal-card p {
+      margin: 0;
+      color: #6b7280;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
     @media (max-width: 460px) {
       .page {
         padding: 0;
@@ -447,6 +616,7 @@
 
       .price {
         font-size: 22px;
+        text-align: left;
       }
     }
   </style>
@@ -519,6 +689,68 @@
               </div>
               <div class="price">HK$80</div>
             </button>
+
+            <button class="package" data-name="Individual Service" data-price="0" data-wait="3 minutes" data-station="Selected Service">
+              <div>
+                <h3>Individual Service</h3>
+                <ul>
+                  <li>Select only the touch-ups you need</li>
+                  <li>Best for quick, focused fixes between classes</li>
+                </ul>
+              </div>
+              <div class="price" id="individual-package-price">From HK$30</div>
+            </button>
+          </div>
+
+          <div class="individual-panel" id="individual-panel">
+            <p class="individual-note">Choose one or more individual services. Prices update automatically.</p>
+
+            <div class="individual-list">
+              <button class="individual-item" type="button" data-label="Hair Styling" data-price="45" data-image="hair-styling.png">
+                <img src="hair-styling.png" alt="Hair styling">
+                <div>
+                  <strong>Hair Styling</strong>
+                  <small>Quick grooming and neat styling</small>
+                </div>
+                <span class="service-price">HK$45</span>
+              </button>
+
+              <button class="individual-item" type="button" data-label="Steam & Press" data-price="40" data-image="steam-press.png">
+                <img src="steam-press.png" alt="Steam and press">
+                <div>
+                  <strong>Steam & Press</strong>
+                  <small>Fast shirt wrinkle reduction</small>
+                </div>
+                <span class="service-price">HK$40</span>
+              </button>
+
+              <button class="individual-item" type="button" data-label="Blazer / Tie" data-price="30" data-image="blazer-tie.png">
+                <img src="blazer-tie.png" alt="Blazer and tie adjustment">
+                <div>
+                  <strong>Blazer / Tie</strong>
+                  <small>Collar, tie and blazer check</small>
+                </div>
+                <span class="service-price">HK$30</span>
+              </button>
+
+              <button class="individual-item" type="button" data-label="Lint Removal" data-price="25" data-image="lint-removal.png">
+                <img src="lint-removal.png" alt="Lint removal">
+                <div>
+                  <strong>Lint Removal</strong>
+                  <small>Remove visible lint and dust</small>
+                </div>
+                <span class="service-price">HK$25</span>
+              </button>
+
+              <button class="individual-item" type="button" data-label="Fragrance Refresh" data-price="25" data-image="fragrance-refresh.png">
+                <img src="fragrance-refresh.png" alt="Fragrance refresh">
+                <div>
+                  <strong>Fragrance Refresh</strong>
+                  <small>Light fragrance or deodorant refresh</small>
+                </div>
+                <span class="service-price">HK$25</span>
+              </button>
+            </div>
           </div>
 
           <div class="section-title">
@@ -526,28 +758,7 @@
             <span id="services-note">5 services included</span>
           </div>
 
-          <div class="services" id="services-list">
-            <div class="service">
-              <img src="hair-styling.png" alt="Hair styling">
-              <span>Hair Styling</span>
-            </div>
-            <div class="service">
-              <img src="steam-press.png" alt="Steam and press">
-              <span>Steam & Press</span>
-            </div>
-            <div class="service">
-              <img src="blazer-tie.png" alt="Blazer and tie adjustment">
-              <span>Blazer / Tie</span>
-            </div>
-            <div class="service">
-              <img src="lint-removal.png" alt="Lint removal">
-              <span>Lint Removal</span>
-            </div>
-            <div class="service">
-              <img src="fragrance-refresh.png" alt="Fragrance refresh">
-              <span>Fragrance Refresh</span>
-            </div>
-          </div>
+          <div class="services" id="services-list"></div>
 
           <div class="section-title">
             <h2>Payment method</h2>
@@ -556,7 +767,7 @@
 
           <div class="payment-grid">
             <button class="pay-btn active">Octopus</button>
-            <button class="pay-btn">FPS</button>
+            <button class="pay-btn">PayMe</button>
             <button class="pay-btn">Card</button>
           </div>
 
@@ -565,6 +776,7 @@
               <span>Selected package</span>
               <strong id="summary-name">Interview Ready</strong>
             </div>
+            <div class="summary-detail" id="summary-detail">Hair Styling, Steam & Press, Blazer / Tie, Lint Removal, Fragrance Refresh</div>
             <div class="summary-row">
               <span>Estimated completion</span>
               <strong>15 min</strong>
@@ -602,6 +814,10 @@
             <strong id="ticket-package">Interview Ready</strong>
           </div>
           <div class="ticket-row">
+            <span>Services</span>
+            <strong id="ticket-services">5 services</strong>
+          </div>
+          <div class="ticket-row">
             <span>Station</span>
             <strong id="ticket-station">Hair Styling</strong>
           </div>
@@ -613,6 +829,10 @@
             <span>Paid by</span>
             <strong id="ticket-payment">Octopus</strong>
           </div>
+          <div class="ticket-row">
+            <span>Total</span>
+            <strong id="ticket-total">HK$120</strong>
+          </div>
         </div>
 
         <button class="cta" onclick="window.print()">Save / Print ticket</button>
@@ -622,34 +842,56 @@
     </section>
   </main>
 
+  <div class="service-modal" id="service-modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="close-modal" id="close-modal" aria-label="Close service description">×</button>
+      <img src="hair-styling.png" alt="" class="modal-icon" id="modal-icon">
+      <h3 id="modal-title">Hair Styling</h3>
+      <p id="modal-description">Quick hair touch-up to help students look neat, polished and presentation-ready before important campus occasions.</p>
+    </div>
+  </div>
+
   <script>
     const packages = document.querySelectorAll('.package');
     const payButtons = document.querySelectorAll('.pay-btn');
+    const individualItems = document.querySelectorAll('.individual-item');
 
     const summaryName = document.getElementById('summary-name');
+    const summaryDetail = document.getElementById('summary-detail');
     const summaryPrice = document.getElementById('summary-price');
     const summaryPayment = document.getElementById('summary-payment');
     const waitTime = document.getElementById('wait-time');
     const nextStation = document.getElementById('next-station');
+    const individualPanel = document.getElementById('individual-panel');
+    const individualPackagePrice = document.getElementById('individual-package-price');
 
     const checkinBtn = document.getElementById('checkin-btn');
     const checkoutScreen = document.getElementById('checkout-screen');
     const confirmationScreen = document.getElementById('confirmation-screen');
 
     const ticketPackage = document.getElementById('ticket-package');
+    const ticketServices = document.getElementById('ticket-services');
     const ticketWait = document.getElementById('ticket-wait');
     const ticketPayment = document.getElementById('ticket-payment');
     const ticketStation = document.getElementById('ticket-station');
+    const ticketTotal = document.getElementById('ticket-total');
     const newCheckin = document.getElementById('new-checkin');
 
     const servicesList = document.getElementById('services-list');
     const servicesNote = document.getElementById('services-note');
 
+    const serviceModal = document.getElementById('service-modal');
+    const closeModal = document.getElementById('close-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalIcon = document.getElementById('modal-icon');
+
     let selectedPackage = 'Interview Ready';
-    let selectedPrice = '120';
+    let selectedPrice = 120;
     let selectedWait = '6 minutes';
     let selectedPayment = 'Octopus';
     let selectedStation = 'Hair Styling';
+    let selectedIndividualServices = [];
 
     const packageServices = {
       'Interview Ready': [
@@ -668,22 +910,82 @@
         ['hair-styling.png', 'Hair Styling'],
         ['lint-removal.png', 'Lint Removal'],
         ['fragrance-refresh.png', 'Fragrance Refresh']
-      ]
+      ],
+      'Individual Service': []
     };
 
-    function updateServices(packageName) {
-      const services = packageServices[packageName];
+    const serviceDescriptions = {
+      'Hair Styling': 'A quick hair touch-up to help students look neat, polished and ready before interviews, presentations or formal campus events.',
+      'Steam & Press': 'A fast shirt steaming service to reduce visible wrinkles and improve overall presentation without needing dorm-room ironing equipment.',
+      'Blazer / Tie': 'A quick outfit adjustment for blazers, collars and ties so students look more professional before high-stakes occasions.',
+      'Lint Removal': 'A simple finishing step to remove visible lint or dust from dark clothing, blazers and formalwear.',
+      'Fragrance Refresh': 'A light fragrance or deodorant refresh designed to help students feel cleaner and more confident before important events.'
+    };
 
+    function openServiceModal(label, image) {
+      modalTitle.textContent = label;
+      modalDescription.textContent = serviceDescriptions[label] || 'A quick campus readiness service designed for important student occasions.';
+      modalIcon.src = image;
+      modalIcon.alt = label;
+
+      serviceModal.classList.add('active');
+      serviceModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeServiceModal() {
+      serviceModal.classList.remove('active');
+      serviceModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderServices(services) {
       servicesList.innerHTML = services
         .map(([image, label]) => `
-          <div class="service">
+          <button class="service" type="button" data-label="${label}" data-image="${image}">
             <img src="${image}" alt="${label}">
             <span>${label}</span>
-          </div>
+          </button>
         `)
         .join('');
 
-      servicesNote.textContent = `${services.length} services included`;
+      servicesNote.textContent = services.length === 1
+        ? '1 service included'
+        : `${services.length} services included`;
+
+      document.querySelectorAll('.service').forEach(service => {
+        service.addEventListener('click', () => {
+          openServiceModal(service.dataset.label, service.dataset.image);
+        });
+      });
+    }
+
+    function updateSummary() {
+      let services;
+
+      if (selectedPackage === 'Individual Service') {
+        services = selectedIndividualServices.map(item => [item.image, item.label]);
+        selectedPrice = selectedIndividualServices.reduce((sum, item) => sum + item.price, 0);
+        selectedStation = selectedIndividualServices.length === 1 ? selectedIndividualServices[0].label : 'Selected Service';
+
+        individualPackagePrice.textContent = selectedPrice > 0 ? `HK$${selectedPrice}` : 'From HK$30';
+        checkinBtn.disabled = selectedIndividualServices.length === 0;
+
+        if (selectedIndividualServices.length === 0) {
+          summaryDetail.textContent = 'Please select at least one individual service.';
+        } else {
+          summaryDetail.textContent = selectedIndividualServices.map(item => item.label).join(', ');
+        }
+      } else {
+        services = packageServices[selectedPackage];
+        checkinBtn.disabled = false;
+        summaryDetail.textContent = services.map(item => item[1]).join(', ');
+      }
+
+      renderServices(services);
+
+      summaryName.textContent = selectedPackage;
+      summaryPrice.textContent = selectedPrice > 0 ? `HK$${selectedPrice}` : 'HK$0';
+      waitTime.textContent = selectedWait;
+      nextStation.textContent = selectedStation;
     }
 
     packages.forEach(button => {
@@ -692,16 +994,39 @@
         button.classList.add('active');
 
         selectedPackage = button.dataset.name;
-        selectedPrice = button.dataset.price;
+        selectedPrice = Number(button.dataset.price);
         selectedWait = button.dataset.wait;
         selectedStation = button.dataset.station;
 
-        summaryName.textContent = selectedPackage;
-        summaryPrice.textContent = `HK$${selectedPrice}`;
-        waitTime.textContent = selectedWait;
-        nextStation.textContent = selectedStation;
+        if (selectedPackage === 'Individual Service') {
+          individualPanel.classList.add('active');
+        } else {
+          individualPanel.classList.remove('active');
+        }
 
-        updateServices(selectedPackage);
+        updateSummary();
+      });
+    });
+
+    individualItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const label = item.dataset.label;
+        const price = Number(item.dataset.price);
+        const image = item.dataset.image;
+
+        item.classList.toggle('selected');
+
+        const alreadySelected = selectedIndividualServices.some(service => service.label === label);
+
+        if (alreadySelected) {
+          selectedIndividualServices = selectedIndividualServices.filter(service => service.label !== label);
+        } else {
+          selectedIndividualServices.push({ label, price, image });
+        }
+
+        if (selectedPackage === 'Individual Service') {
+          updateSummary();
+        }
       });
     });
 
@@ -716,10 +1041,16 @@
     });
 
     checkinBtn.addEventListener('click', () => {
+      if (selectedPackage === 'Individual Service' && selectedIndividualServices.length === 0) {
+        return;
+      }
+
       ticketPackage.textContent = selectedPackage;
+      ticketServices.textContent = summaryDetail.textContent;
       ticketWait.textContent = selectedWait;
       ticketPayment.textContent = selectedPayment;
       ticketStation.textContent = selectedStation;
+      ticketTotal.textContent = selectedPrice > 0 ? `HK$${selectedPrice}` : 'HK$0';
 
       checkoutScreen.style.display = 'none';
       confirmationScreen.style.display = 'block';
@@ -731,6 +1062,22 @@
       checkoutScreen.style.display = 'block';
       window.scrollTo(0, 0);
     });
+
+    closeModal.addEventListener('click', closeServiceModal);
+
+    serviceModal.addEventListener('click', (event) => {
+      if (event.target === serviceModal) {
+        closeServiceModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeServiceModal();
+      }
+    });
+
+    updateSummary();
   </script>
 </body>
 </html>
