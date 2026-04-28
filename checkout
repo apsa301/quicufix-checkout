@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuickFix | Walk-in Check-in</title>
+  <style>
+    :root {
+      --navy: #0f2545;
+      --navy-2: #16365f;
+      --gold: #c8a75a;
+      --gold-2: #e8d49a;
+      --cream: #f7f3ea;
+      --white: #ffffff;
+      --grey: #6b7280;
+      --light: #eef2f6;
+      --success: #1f8a5b;
+      --shadow: 0 18px 45px rgba(15, 37, 69, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2f6 45%, #f7f3ea 100%);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .phone {
+      width: min(430px, 100%);
+      background: var(--white);
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid rgba(15, 37, 69, 0.08);
+    }
+
+    .hero {
+      background: radial-gradient(circle at top right, rgba(232, 212, 154, 0.36), transparent 34%), linear-gradient(135deg, var(--navy), var(--navy-2));
+      color: white;
+      padding: 28px 24px 22px;
+      position: relative;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      font-size: 30px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 7px solid white;
+      position: relative;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      right: -9px;
+      bottom: -5px;
+      width: 22px;
+      height: 9px;
+      background: var(--gold);
+      transform: rotate(42deg);
+      border-radius: 2px;
+    }
+
+    .brand span:last-child { color: var(--gold-2); }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold-2);
+      border: 1px solid rgba(232, 212, 154, 0.6);
+      border-radius: 999px;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+      line-height: 1.08;
+      margin: 0 0 8px;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .status-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    .status-card small {
+      display: block;
+      color: rgba(255,255,255,0.68);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .status-card strong {
+      color: white;
+      font-size: 15px;
+    }
+
+    .content { padding: 22px; }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h2 {
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title span {
+      font-size: 12px;
+      color: var(--grey);
+      font-weight: 600;
+    }
+
+    .packages {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .package {
+      border: 1.5px solid #d9dee7;
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .package.active {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #fffaf0, #ffffff);
+      box-shadow: 0 10px 24px rgba(200, 167, 90, 0.18);
+    }
+
+    .package h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+    }
+
+    .package ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--grey);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .price {
+      font-size: 24px;
+      font-weight: 850;
+      color: var(--navy);
+      letter-spacing: -0.04em;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .service {
+      background: var(--light);
+      border-radius: 16px;
+      padding: 12px 8px;
+      text-align: center;
+      min-height: 78px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .service .icon { font-size: 20px; }
+    .service span { font-size: 11px; font-weight: 700; line-height: 1.2; }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .pay-btn {
+      border: 1.5px solid #d9dee7;
+      background: white;
+      border-radius: 18px;
+      padding: 14px 8px;
+      font-weight: 800;
+      color: var(--navy);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .pay-btn.active {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: white;
+    }
+
+    .summary {
+      background: #f8fafc;
+      border: 1px solid #e5eaf1;
+      border-radius: 22px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 0;
+      font-size: 14px;
+    }
+
+    .summary-row span:first-child { color: var(--grey); }
+    .summary-row strong { font-size: 18px; }
+
+    .cta {
+      width: 100%;
+      border: 0;
+      border-radius: 20px;
+      padding: 17px;
+      background: linear-gradient(135deg, var(--navy), #1e4a82);
+      color: white;
+      font-size: 16px;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(15, 37, 69, 0.26);
+    }
+
+    .confirmation {
+      display: none;
+      padding: 26px 22px 28px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(31, 138, 91, 0.12);
+      color: var(--success);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      font-size: 34px;
+      font-weight: 900;
+    }
+
+    .confirmation h2 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      letter-spacing: -0.04em;
+    }
+
+    .confirmation p {
+      margin: 0 0 18px;
+      color: var(--grey);
+      line-height: 1.45;
+    }
+
+    .ticket {
+      border: 1.5px dashed var(--gold);
+      background: #fffaf0;
+      border-radius: 22px;
+      padding: 18px;
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .ticket-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+
+    .ticket-row span:first-child { color: var(--grey); }
+
+    .back-btn {
+      background: transparent;
+      border: 0;
+      color: var(--navy);
+      font-weight: 800;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 460px) {
+      .page { padding: 0; align-items: stretch; }
+      .phone { border-radius: 0; width: 100%; min-height: 100vh; }
+      .services { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="phone" aria-label="QuickFix walk-in payment mockup">
+      <div id="checkout-screen">
+        <header class="hero">
+          <div class="top-row">
+            <div class="brand" aria-label="QuickFix logo">
+              <div class="brand-mark"></div>
+              <div>Quick<span>Fix</span></div>
+            </div>
+            <div class="badge">HKUST Campus</div>
+          </div>
+          <h1>Look sharp in<br />15 minutes.</h1>
+          <p>Walk in, choose your readiness package, pay securely, and get directed to the next available station.</p>
+          <div class="status-strip">
+            <div class="status-card">
+              <small>Estimated wait</small>
+              <strong id="wait-time">6 minutes</strong>
+            </div>
+            <div class="status-card">
+              <small>Next station</small>
+              <strong>Hair Styling</strong>
+            </div>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="section-title">
+            <h2>Choose package</h2>
+            <span>Pay per session</span>
+          </div>
+
+          <div class="packages">
+            <button class="package active" data-name="Interview Ready" data-price="120" data-wait="6 minutes">
+              <div>
+                <h3>Interview Ready</h3>
+                <ul>
+                  <li>Hair styling · Shirt steam</li>
+                  <li>Blazer / tie check · Lint removal</li>
+                  <li>Fragrance / deodorant refresh</li>
+                </ul>
+              </div>
+              <div class="price">HK$120</div>
+            </button>
+
+            <button class="package" data-name="Presentation Ready" data-price="90" data-wait="4 minutes">
+              <div>
+                <h3>Presentation Ready</h3>
+                <ul>
+                  <li>Hair styling · Shirt steam</li>
+                  <li>Lint removal</li>
+                </ul>
+              </div>
+              <div class="price">HK$90</div>
+            </button>
+
+            <button class="package" data-name="Event Refresh" data-price="80" data-wait="3 minutes">
+              <div>
+                <h3>Event Refresh</h3>
+                <ul>
+                  <li>Hair styling · Lint removal</li>
+                  <li>Fragrance / deodorant refresh</li>
+                </ul>
+              </div>
+              <div class="price">HK$80</div>
+            </button>
+          </div>
+
+          <div class="section-title">
+            <h2>Included services</h2>
+            <span>Express model</span>
+          </div>
+
+          <div class="services">
+            <div class="service"><div class="icon">〰️</div><span>Hair styling</span></div>
+            <div class="service"><div class="icon">👔</div><span>Steam & press</span></div>
+            <div class="service"><div class="icon">🧥</div><span>Blazer / tie</span></div>
+            <div class="service"><div class="icon">✨</div><span>Finish touch</span></div>
+          </div>
+
+          <div class="section-title">
+            <h2>Payment method</h2>
+            <span>Fast checkout</span>
+          </div>
+
+          <div class="payment-grid">
+            <button class="pay-btn active">Octopus</button>
+            <button class="pay-btn">FPS</button>
+            <button class="pay-btn">Card</button>
+          </div>
+
+          <div class="summary">
+            <div class="summary-row"><span>Selected package</span><strong id="summary-name">Interview Ready</strong></div>
+            <div class="summary-row"><span>Estimated completion</span><strong>15 min</strong></div>
+            <div class="summary-row"><span>Total</span><strong id="summary-price">HK$120</strong></div>
+          </div>
+
+          <button class="cta" id="checkin-btn">Check in & pay</button>
+        </div>
+      </div>
+
+      <div class="confirmation" id="confirmation-screen">
+        <div class="success-icon">✓</div>
+        <h2>You’re checked in.</h2>
+        <p>Your QuickFix ticket is ready. Please wait near the check-in counter until your station is called.</p>
+        <div class="ticket">
+          <div class="ticket-row"><span>Ticket no.</span><strong>QF-027</strong></div>
+          <div class="ticket-row"><span>Package</span><strong id="ticket-package">Interview Ready</strong></div>
+          <div class="ticket-row"><span>Station</span><strong>Hair Styling</strong></div>
+          <div class="ticket-row"><span>Estimated wait</span><strong id="ticket-wait">6 minutes</strong></div>
+          <div class="ticket-row"><span>Paid by</span><strong id="ticket-payment">Octopus</strong></div>
+        </div>
+        <button class="cta" onclick="window.print()">Save / Print ticket</button>
+        <button class="back-btn" id="new-checkin">Start new check-in</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const packages = document.querySelectorAll('.package');
+    const payButtons = document.querySelectorAll('.pay-btn');
+    const summaryName = document.getElementById('summary-name');
+    const summaryPrice = document.getElementById('summary-price');
+    const waitTime = document.getElementById('wait-time');
+    const checkinBtn = document.getElementById('checkin-btn');
+    const checkoutScreen = document.getElementById('checkout-screen');
+    const confirmationScreen = document.getElementById('confirmation-screen');
+    const ticketPackage = document.getElementById('ticket-package');
+    const ticketWait = document.getElementById('ticket-wait');
+    const ticketPayment = document.getElementById('ticket-payment');
+    const newCheckin = document.getElementById('new-checkin');
+
+    let selectedPackage = 'Interview Ready';
+    let selectedPrice = '120';
+    let selectedWait = '6 minutes';
+    let selectedPayment = 'Octopus';
+
+    packages.forEach(button => {
+      button.addEventListener('click', () => {
+        packages.forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        selectedPackage = button.dataset.name;
+        selectedPrice = button.dataset.price;
+        selectedWait = button.dataset.wait;
+        summaryName.textContent = selectedPackage;
+        summaryPrice.textContent = `HK$${selectedPrice}`;
+        waitTime.textContent = selectedWait;
+      });
+    });
+
+    payButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        payButtons.forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        selectedPayment = button.textContent;
+      });
+    });
+
+    checkinBtn.addEventListener('click', () => {
+      ticketPackage.textContent = selectedPackage;
+      ticketWait.textContent = selectedWait;
+      ticketPayment.textContent = selectedPayment;
+      checkoutScreen.style.display = 'none';
+      confirmationScreen.style.display = 'block';
+      window.scrollTo(0, 0);
+    });
+
+    newCheckin.addEventListener('click', () => {
+      confirmationScreen.style.display = 'none';
+      checkoutScreen.style.display = 'block';
+      window.scrollTo(0, 0);
+    });
+  </script>
+</body>
+</html>
